@@ -155,6 +155,7 @@ Wlj.widgets.views.index.grid.TileGrid = Ext.extend(Ext.DataView, {
 		this.tpl = new Ext.XTemplate(templateString);
 	},
 	afterRender : function(){
+		debugger;
 		Wlj.widgets.views.index.grid.TileGrid.superclass.afterRender.call(this);
 		if(this.url && this.columns){
 			Wlj.TileMgr.addDataCfg({

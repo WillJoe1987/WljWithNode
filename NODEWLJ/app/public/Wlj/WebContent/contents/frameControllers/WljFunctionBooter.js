@@ -55,7 +55,7 @@
 	linkVersionControl("/contents/wljFrontFrame/styles/search/searchcss/common.css");
 	linkVersionControl("/contents/wljFrontFrame/styles/search/searchcss/base_frame.css");
 	linkVersionControl("/contents/wljFrontFrame/styles/search/searchthemes/"+__theme+"/frame.css");
-	linkVersionControl("/contents/resource/ext3/resources/css/debug.css");
+	linkVersionControl("/contents/wljFrontFrame/styles/common/ext3/resources/css/debug.css");
 	linkVersionControl("/contents/wljFrontFrame/styles/search/searchthemes/"+__theme+"/main.css");
 	if(__wordsize === 'ra_normal'){
 		linkVersionControl("/contents/wljFrontFrame/styles/search/searchcss/font_normal.css");
@@ -81,7 +81,6 @@
 	    scriptVersionControl("/contents/frameControllers/widgets/app/Wlj-frame-function-app.js");
 	    scriptVersionControl("/contents/frameControllers/widgets/app/Wlj-frame-function-builder.js");
 	    scriptVersionControl("/contents/frameControllers/widgets/app/plugins/thumbnails/Wlj-frame-functions-plugin-thumbnails.js");
-	    scriptVersionControl("/contents/frameControllers/widgets/app/plugins/thumbnails/Wlj-frame-functions-plugin-initflow.js");
 	}else if(runMod=='debug'){
 		scriptVersionControl("/contents/frameControllers/Wlj.function.all-v1.0.x-debug.js");
 	}else{
@@ -90,5 +89,4 @@
 	scriptVersionControl("/contents/frameControllers/systemPatch.js");
     scriptVersionControl("/contents/frameControllers/widgets/app/Wlj-frame-function-header.js");
     scriptVersionControl("/contents/frameControllers/widgets/app/Wlj-frame-function-api.js");
-    scriptVersionControl("/contents/frameControllers/widgets/app/testmod/testrunning.js");
 })();
