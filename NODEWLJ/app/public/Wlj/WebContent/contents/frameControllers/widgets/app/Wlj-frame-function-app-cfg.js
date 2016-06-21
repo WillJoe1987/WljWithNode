@@ -190,14 +190,14 @@ Wlj.frame.functions.app.Util = {
 					}
 					var jsUrl = parent.CUSTVIEW?parent.CUSTVIEW.CURRENT_VIEW_URL:'';
 					if(!jsUrl){
-						jsUrl = taskMgr.getTask('task_'+JsContext._resId).action;
+						jsUrl = taskMgr.getTask('task_'+__resId).action;
 					}
 					var html =	'<div class=\'prpBanner\'></div><div class=\'prpContent\'>'+
-					'<h1>宇信易诚科技有限公司&nbsp;&copy;&nbsp;版权所有</h1>'+
+					'<h1>&nbsp;&copy;&nbsp;版权所有</h1>'+
 					'产品版本：V4.6'+
 					'<br/>前端版本：'+__frameVersion+':'+__frontVersion+
-					'<br/>功能名称：'+taskMgr.getTask('task_'+JsContext._resId).name+
-					'<br/>ResId：'+JsContext._resId+
+					'<br/>功能名称：'+taskMgr.getTask('task_'+__resId).name+
+					'<br/>ResId：'+__resId+
 					'<br/>引用js：'+jsUrl+
 					'</div>';
 						new Ext.Window({
