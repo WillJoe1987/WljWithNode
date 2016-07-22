@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>YCGrid HTML Demo</title>
+    <link type="text/css" href="../main.css" rel="stylesheet" />
+    <style type="text/css">
+    body, td, th {font-size: 12px; color: #222;   outline: none;}
+	* {  font-family: 微软雅黑, 宋体;}
+	body {background-color: #fff; margin: 0; padding: 0;}
+	div, ul, li, form, p {margin: 0; padding: 0; list-style: none; border: none;}
+	</style>
+</head>
+<body>
+    <!--01 yc-grid(单行) sta-->
+     <br/>
+    ---新方式，取消”行“的概念，通过单元格堆积形成表格样子，HTMl结构发生变化，需要调整或者重新实现原有封装/事件支持，并实现”合并“这块的逻辑功能----
+    <br/><br/>
+    <!-- 注意：须在原有yc-grid的基础上追加yc-byCells-->
+    <div class="yc-grid  yc-byCells" style="width:800px;height:250px;">
+        <div class="yc-grid-header" style="width:800px;">
+            <div class="ygh-container" style="width:1226px;"><!-- width=所有ygh-hd宽度之和+n*12 -->
+                <div class="ygh-hd" style="width:30px;">序号</div>
+                <div class="ygh-hd" style="width:200px;"><div class="ygh-hd-text">产品名称</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">产品编号</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">产品类别</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd ygh-hd-right" style="width:150px;"><div class="ygh-hd-text">认购金额</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">发布日期</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd " style="width:150px;"><div class="ygh-hd-text">截止日期</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">产品状态</div><div class="ygh-hd-ctrl"></div></div>
+            </div>
+        </div>
+        <div class="yc-grid-center" style="width:800px;height: 200px;">
+            <div class="ygc-container" style="width:1226px;"><!-- width=表头容器宽度 -->
+            <!-- 第1行 开始 -->
+                    <div class="ygc-cell ygc-cell-no ygc-row-odd" style="width:30px;">1</div>
+                    <div class="ygc-cell  ygc-row-odd" style="width:200px;"></div>
+                    <!-- 该单元格为合并单元格，合并第2列第1、2行  【注意】：为保持占位，或者说框架逻辑处理更简单，不用所有单元格都通过浮动定位，原有单元格须置空保留sta-->
+                    <div class="ygc-cell  ygc-row-odd ygc-popCell" style="width:200px;height:49px;line-height:49px; left:42px;top:0;">"金葵花"焦点联动系列之标普500</div>
+                    <!-- 说明：
+                    				1、合并n列，width宽度=n列宽度之和+(n-1)*12；
+                    				2、合并n行，height/line-height高度=25*n-1；
+                    				3、从第n列开始合并，left左边浮动距离=第n列前所有单元格宽度+(n-1)*12;
+                    				4、从第n行开始合并，top上边浮动距离=(n-1)*25。
+                     -->
+                    <!-- 该单元格为合并单元格，合并第二列第1、2行  end-->
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">104322</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right ygc-row-odd" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">已发布</div>
+            <!-- 第1行 结束 -->   
+             
+            <!-- 第2行 开始 -->
+                    <div class="ygc-cell ygc-cell-no" style="width:30px;">2</div>
+                    <div class="ygc-cell " style="width:200px;"></div>
+                    <div class="ygc-cell" style="width:150px;">104322</div>
+                    <div class="ygc-cell" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell" style="width:150px;">已发布</div>
+            <!-- 第2行 结束 -->
+            
+            <!-- 第3行 开始 -->
+                    <div class="ygc-cell ygc-cell-no ygc-row-odd" style="width:30px;">3</div>
+                    <div class="ygc-cell  ygc-row-odd" style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">104322</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right ygc-row-odd" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">已发布</div>
+            <!-- 第3行 结束 -->   
+             
+            <!-- 第4行 开始 -->
+                    <div class="ygc-cell ygc-cell-no" style="width:30px;">4</div>
+                    <div class="ygc-cell " style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell" style="width:150px;">104322</div>
+                    <div class="ygc-cell" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell" style="width:150px;">已发布</div>
+            <!-- 第4行 结束 -->  
+            
+            </div>
+        </div>
+    </div>
+    <!--01 yc-grid(单行) end-->    
+    
+    <br/>
+    ---Old方式，可以保持原有HTMl结构，是否意味着不用改动原有封装及事件支持，仅需实现”合并单元格“这块的功能，互不影响----
+    <br/><br/>
+    
+    <!--02 yc-grid(单行) sta-->
+    <!-- 注意：须在原有yc-grid的基础上追加yc-byCells-->
+    <div class="yc-grid  yc-byCells" style="width:800px;height:250px;">
+        <div class="yc-grid-header" style="width:800px;">
+            <div class="ygh-container" style="width:1226px;">
+                <div class="ygh-hd" style="width:30px;">序号</div>
+                <div class="ygh-hd" style="width:200px;"><div class="ygh-hd-text">产品名称</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text ygh-hd-order-desc">产品编号</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">产品类别</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd ygh-hd-right" style="width:150px;"><div class="ygh-hd-text">认购金额</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">发布日期</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd " style="width:150px;"><div class="ygh-hd-text">截止日期</div><div class="ygh-hd-ctrl"></div></div>
+                <div class="ygh-hd" style="width:150px;"><div class="ygh-hd-text">产品状态</div><div class="ygh-hd-ctrl"></div></div>
+            </div>
+        </div>
+        <div class="yc-grid-center" style="width:800px;height: 200px;">
+            <div class="ygc-container" style="width:1226px;"><!-- width=表头容器宽度 -->
+                <div class="ygc-row ygc-row-odd" style="/*width:XXpx;*/">
+                    <div class="ygc-cell ygc-cell-no ygc-row-odd" style="width:30px;">1</div>
+                    <div class="ygc-cell  ygc-row-odd" style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">104322</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right ygc-row-odd" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">已发布</div>
+                </div>
+                <div class="ygc-row" style="/*width:XXpx;*/">
+                    <div class="ygc-cell ygc-cell-no" style="width:30px;">2</div>
+                    <div class="ygc-cell " style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell" style="width:150px;"></div>
+                    <div class="ygc-cell" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell" style="width:150px;">已发布</div>
+                </div>
+                <!-- 该单元格为合并单元格，合并第3列第2、3行  【注意】：为保持占位，或者说框架逻辑处理更简单，不用所有单元格都通过浮动定位，原有单元格须置空保留sta-->
+                    <div class="ygc-cell  ygc-row-odd ygc-popCell" style="width:150px;height:49px;line-height:49px; left:254px;top:25px;">104322</div>
+                    <!-- 说明：
+                    				1、合并n列，width宽度=n列宽度之和+(n-1)*12；
+                    				2、合并n行，height/line-height高度=25*n-1；
+                    				3、从第n列开始合并，left左边浮动距离=第n列前所有单元格宽度+(n-1)*12;
+                    				4、从第n行开始合并，top上边浮动距离=(n-1)*25。
+                     -->
+                <!-- 该单元格为合并单元格，合并第3列第2、3行  end-->
+               <div class="ygc-row ygc-row-odd" style="/*width:XXpx;*/">
+                    <div class="ygc-cell ygc-cell-no ygc-row-odd" style="width:30px;">3</div>
+                    <div class="ygc-cell  ygc-row-odd" style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">104322</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right ygc-row-odd" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell ygc-row-odd" style="width:150px;">已发布</div>
+                </div>
+                <div class="ygc-row" style="/*width:XXpx;*/">
+                    <div class="ygc-cell ygc-cell-no" style="width:30px;">4</div>
+                    <div class="ygc-cell " style="width:200px;">"金葵花"焦点联动系列之标普500</div>
+                    <div class="ygc-cell" style="width:150px;">104322</div>
+                    <div class="ygc-cell" style="width:150px;">国内理财</div>
+                    <div class="ygc-cell ygc-cell-right" style="width:150px;">￥10,000.00</div>
+                    <div class="ygc-cell" style="width:150px;">2014-04-29</div>
+                    <div class="ygc-cell" style="width:150px;">2014-10-28</div>
+                    <div class="ygc-cell" style="width:150px;">已发布</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--02 yc-grid(单行) end-->
+    
+    
+</body>
+</html>

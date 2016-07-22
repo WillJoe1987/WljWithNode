@@ -139,6 +139,7 @@ body,td,th {
 }
 
 .ygc-container {
+    *position:static;
 }
 
 .ygc-row {
@@ -150,8 +151,12 @@ body,td,th {
     overflow: hidden;
 }
 
-.ygc-row-odd {
+.ygc-row-odd ,.ygc-popCell-odd{
     background-color: #edf2f8;
+}
+
+.ygc-row-even,.ygc-popCell-even{
+    background-color: #e2e6ef;
 }
 
 .ygc-row:hover, .ygc-row-hover{
@@ -182,9 +187,16 @@ body,td,th {
     overflow: hidden;
     cursor: default;
     position:relative;
+    *position:static;
 }
 .ygc-cell-over{background-color: #009582;color: #fff;}
 .ygc-cell-other-over{background-color: #bce7e2;color: #222;}
+
+.yc-bg1{background-color: #a8d803;}
+.yc-bg2{background-color: #039ed8;}
+.yc-bg3{background-color: #e015de;}
+.yc-bg4{background-color: #ea2641;}
+.yc-bg5{background-color: #ecbe1f;}
 
 .ygc-cell-left{
 	text-align: left;
@@ -2528,7 +2540,7 @@ ul.x-tab-strip-bottom{
 	background-color: #00b8a1;	
 }
 .x-panel-tbar .x-toolbar-layout-ct{
-	padding: 0;
+	padding: 0 2px;
 }
 .x-toolbar-layout-ct .x-btn{
 	Nomargin-left: 5px;
@@ -3839,6 +3851,8 @@ body.x-body-masked .x-window-plain .x-window-mc {
     border-bottom-color:#a3b3d7;
 }
 
+.ipf-panel>.x-panel-header-noborder{display: none;}
+
 .x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
     border-bottom-color:#99bbe8;
 }
@@ -4028,3 +4042,63 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .dinkPanel>.x-panel-bwrap>.x-panel-body>div>div>span.nailed{background: url(pics/ico/btn/dark/ico_95.png) center center no-repeat;}
 .dinkPanel>.x-panel-bwrap>.x-panel-body>div>div>span.nailed:hover{background: url(pics/ico/btn/white/ico_95.png) center center no-repeat;}
 /*dinkPanel end*/
+
+/*进度步骤 sta*/
+.yc-prg-container{padding-left: 50px;}
+.yc-prg-step{float: left;height: 30px;width: 155px;padding-right:5px; position: relative;}
+.yps-step{height: 13px;padding-left: 20px;padding-right: 20px;position: relative;}
+.yps-text{height: 17px;line-height: 17px;width: 100%;overflow: hidden;color: #777;position: absolute;margin-left: -46%;text-align: center;}
+.yps-left{position:absolute;left:0;top:0; width: 20px;height: 100%;background: url(pics/ycStep/pic_04.png) left no-repeat;}
+.yps-center{height:100%;display:block; background: url(pics/ycStep/pic_05.png) center center no-repeat;}
+.yps-right{position:absolute;right:0;top:0;width: 20px;height: 100%;background: url(pics/ycStep/pic_06.png) left no-repeat;}
+.yps-right>span{position: absolute;top:13px;line-height: 17px;overflow:auto;white-space: nowrap;}
+.yps-last .yps-right{width: 25px;background: url(pics/ycStep/pic_09.png) left no-repeat;}
+
+.yps-doing .yps-text{color: #444;}
+.yps-doing .yps-left{background: url(pics/ycStep/pic_01.png) left no-repeat;}
+.yps-doing .yps-center{background: url(pics/ycStep/pic_07.png) center center no-repeat;}
+.yps-doing .yps-right{background: url(pics/ycStep/pic_06.png)left no-repeat;}
+.yps-last.yps-doing .yps-right{width: 25px;background: url(pics/ycStep/pic_09.png) left no-repeat;}
+
+.yps-over .yps-text{color: #444;}
+.yps-over .yps-left{background: url(pics/ycStep/pic_01.png) left no-repeat;}
+.yps-over .yps-center{background: url(pics/ycStep/pic_02.png) center center no-repeat;}
+.yps-over .yps-right{background: url(pics/ycStep/pic_03.png) left no-repeat;}
+.yps-last.yps-over .yps-right{background: url(pics/ycStep/pic_08.png) left no-repeat;}
+/*进度步骤 end*/
+
+/*标签查询 sta   须整合该部分css到主题darkblue下 main.css文件末尾*/
+ .ys-stChooseTags{display:block;min-height:30px;background-color:#f5f7fb;position:relative;padding-left:140px;overflow:auto;}
+ .ys-stctTitle{display:block;position:absolute;left:0;top:3px; width:120px;padding:0 10px;margin:0; text-align:right;line-height:25px;min-height:25px;font-size:12px;color:#555;font-weight:bold;}
+ .ys-stctTags{display:block;padding:3px;clear:both;}
+ a.ys-stcTag:link,a.ys-stcTag:visited {float:left;position:relative; margin-left:3px;margin-right:3px;padding:0 20px 0 5px; font-size: 12px;color: #00829c;text-decoration: none;outline: none;line-height:18px;height:18px;border-radius:5px;margin-top:3px;margin-bottom:3px;background:#fff;border:1px #00829c dashed;}
+ a.ys-stcTag:hover {color: #00829c;text-decoration: none;background:#dff0f4;}
+ a.ys-stcTag:active {color: #00829c;background:#fff;}
+ a.ys-stcTag i{position:absolute;display:block;width:16px;height:18px;right:0;top:0;border-radius:5px;}
+ a.ys-stcTag:link i,a.ys-stcTag:visited i,
+ a.ys-stcTag:hover i,a.ys-stcTag:active i{background:url(pics/other/ys-st_pic_03.gif) center center no-repeat;}
+ a.ys-stcTag i:hover{background:url(pics/other/ys-st_pic_03.gif) center center #a4e1ed no-repeat;}
+ .ys-stTags{display:block;overflow:auto;min-height:30px;height:auto;}
+ .ys-stGroup{display:block;min-height:30px;padding-left:140px;border-top:1px #c8ccd6 dashed;position:relative;overflow:auto;}
+ .ys-stgTitle{display:block;position:absolute;left:0;top:3px; width:120px;padding:0 10px;margin:0; text-align:right;line-height:25px;min-height:25px;font-size:12px;font-weight:normal;color:#555;}
+ .ys-stgTags{display:block;padding:3px;clear:both;}
+ .ys-stgTag:link,.ys-stgTag:visited {float:left;position:relative; margin-left:3px;margin-right:3px;padding:0 20px 0 5px; font-size: 12px;color: #00829c;text-decoration: none;outline: none;line-height:20px;height:20px;border-radius:5px;margin-top:3px;margin-bottom:3px;}
+ .ys-stgTag:hover {color: #fff;text-decoration: none;background:#00829c;}
+ .ys-stgTag:active {color: #fff;background:#4c9fe7;} 
+ .ys-stgTag i{position:absolute;display:block;width:16px;height:18px;right:1px;top:1px;border-radius:5px;}
+ .ys-stgTag:hover i,.ys-stgTag:active i{background:url(pics/other/ys-st_pic_01.gif) center center no-repeat;}
+ .ys-stgTag.hasCk:link,.ys-stgTag.hasCk:visited {background:#00829c;color:#fff;}
+ .ys-stgTag.hasCk:hover {background:#0aa0be;color:#fff;}
+ .ys-stgTag.hasCk:active {color:#fff;background:#00829c;}
+ .ys-stgTag.hasCk:link i,.ys-stgTag.hasCk:visited i,  
+ .ys-stgTag.hasCk:hover i,.ys-stgTag.hasCk:active i{background:url(pics/other/ys-st_pic_02.gif) center center no-repeat;}
+ .ys-stgTag.hasCk i:hover{background:url(pics/other/ys-st_pic_02.gif) center center #21bad8 no-repeat;}
+ /*标签查询 end*/
+
+/*grid合并单元 sta*/
+.yc-byCells,.yc-byCells .yc-grid-header{overflow: hidden;}
+.yc-byCells .ygc-container{position: relative;}
+.yc-byCells .ygc-cell{border-right: 1px #bfc8da solid;border-bottom: 1px #bfc8da solid;padding-left:5px;display: inline;height: 24px;line-height: 24px;}
+.yc-byCells .ygc-cell.ygc-cell-no{clear: left; }
+.ygc-popCell{position: absolute;z-index:2; border-right: 1px #bfc8da solid;border-bottom: 1px #bfc8da solid;padding-left:5px;padding-right: 6px;}
+/*grid合并单元 end*/
