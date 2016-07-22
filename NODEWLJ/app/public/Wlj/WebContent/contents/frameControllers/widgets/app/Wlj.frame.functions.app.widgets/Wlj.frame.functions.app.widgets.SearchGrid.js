@@ -10,8 +10,11 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 	autoScroll : false,
 	rnWidth : 40,
 	needRN : false,
+	closeMutiSelect : false,
 	columnGroups : false,
 	hoverXY : false,
+	cellJointable : false,
+	jointColumnsCountTop : 0,
 	pagSrollingLevel : 'top', // top,buttom,title,{groupLevel}
 	beresized : function (p, aw, ah, rw, rh) {
 		var h = parseInt(ah, 10);
@@ -37,8 +40,8 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 		}
 	},
 	onColumnResize : function(index, res, width, height, e, name, totleWidth){
-		this.store.fields.get(name).resutlWidth = width;
-		this.searchDomain.dataFields[index-1].resutlWidth = width;
+		this.store.fields.get(name).resultWidth = width;
+		this.searchDomain.dataFields[index-1].resultWidth = width;
 		this.getLayoutTarget().applyStyles({
 			width : totleWidth + 'px'
 		});
@@ -250,7 +253,7 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 			return false;
 		}
 		var rowIndex = parseInt(row.dom.getAttribute('rowIndex'));
-		if(Ext.fly(html).hasClass('ygc-cell-no')){
+		if(Ext.fly(html).hasClass('ygc-cell-no') && !_this.closeMutiSelect){
 			if(!row.hasClass('ygc-row-selected')){
 				row.addClass('ygc-row-selected');
 				if(this.lockingViewBuilder){
@@ -299,7 +302,10 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 	initElements : function(){
 		var Element = Ext.Element;
 		var body = this.body;
-		
+		/**
+		 * ========================================================
+		 **/
+		body.addClass('yc-byCells');
 		this.lockedElement = body.createChild({
 			tag : 'div',
 			style : 'width:10%;float:left;min-height:1px;'
@@ -362,9 +368,12 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 			rnWidth : _this.rnWidth,
 			searchGridView : _this,
 			needRN : _this.needRN,
+			closeMutiSelect : _this.closeMutiSelect,
 			easingStrtegy : _this.easingStrtegy,
 			columnGroups : _this.columnGroups ? _this.columnGroups : false,
-			enableDataDD : _this.enableDataDD
+			enableDataDD : _this.enableDataDD,
+			cellJointable : _this.cellJointable,
+			jointColumnsCountTop : _this.jointColumnsCountTop
 		});
 		this.titleTile.titleTile.render(this.hdElement);
 		this.titleHeight = this.titleTile.titleTile.el.getViewSize().height;
@@ -464,7 +473,7 @@ Wlj.frame.functions.app.widgets.SearchGrid = Ext.extend(Ext.Panel, {
 		if(!_this.hasRows()){
 			return [];
 		}else{
-			return this.getLayoutTarget().dom.childNodes;
+			return this.getLayoutTarget().select('.ygc-row').elements;
 		}
 	},
 	initDataEvent : function(){
@@ -750,9 +759,24 @@ Wlj.frame.functions.app.widgets.TitleTile = function(cfg){
 	this.resumeColumnGroup();
 	this.createTitle();
 	this.createRecordTileEl();
+	var _this = this;
+	this.jointColumns = new Ext.util.MixedCollection();
+	if(this.cellJointable){
+		Ext.each(this.indexedField, function(fieldname){
+			if(_this.adjusticeJoint(_this.store.fields.get(fieldname))){
+				_this.jointColumns.add(fieldname,new Wlj.frame.functions.app.widgets.JointTitle({
+					columnName :fieldname,
+					grid : _this.searchGridView
+				}));
+			}
+		});
+	}
 };
 Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 	alwaysField : true,
+	closeMutiSelect : false,
+	cellJointable : false,
+	jointColumnsCountTop: 0,//可合并的数据列数上限
 	float : 'left',
 	lineHeight : 27,
 	defaultFieldWidth : 150,
@@ -772,6 +796,33 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 			return dataType.getTitleClass();
 		}
 		return '';
+	},
+	jointColumn : function(name){
+		if(!this.cellJointable) return false;
+		if(this.jointColumnsCountTop !==0 && this.jointColumns.getCount() >= this.jointColumnsCountTop) return;
+		this.jointColumns.add(name, new Wlj.frame.functions.app.widgets.JointTitle({
+			columnName : name,
+			grid : this.searchGridView
+		}));
+		this.jointColumns.each(function(j){
+			j.buildJointEls();
+		});
+	},
+	unjointColumn : function(name){
+		if(!this.cellJointable) return false;
+		var theColumn = this.jointColumns.get(name);
+		if(!theColumn) return false;
+		else {
+			this.jointColumns.remove(theColumn);
+			theColumn.destroy();
+		}
+	},
+	adjusticeJoint : function(object){
+		if(!this.cellJointable) return false;
+		if(this.jointColumnsCountTop !==0 && this.jointColumns.getCount() >= this.jointColumnsCountTop) return false;
+		if(!object) return false;
+		if(!object.jointable) return false;
+		return true;
 	},
 	resumeColumnGroup : function(){
 		this.CTO = [];
@@ -813,6 +864,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 			html : '序号'
 		});
 		this.indexTile.on('afterrender', function(itile){
+			if(_this.closeMutiSelect) return;
 			itile.el.on('click',function(){
 				if(!itile.__ALLS){
 					_this.store.resultContainer.allSelect();
@@ -883,7 +935,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 		var _this = this;
 		var display = 'block';
 		if(!this.needRN) display = 'none';
-		var indexHTML = '<div class="ygc-cell ygc-cell-no" style="display:'+display+';width:'+_this.rnWidth+'px; margin: 0px; float: left; height: 27px;">'+
+		var indexHTML = '<div class="ygc-cell ygc-cell-no" style="display:'+display+';width:'+_this.rnWidth+'px; margin: 0px; float: left; height: 26px;">'+
 			'{index+1}' + 
 			'</div>';
 		return indexHTML;
@@ -895,7 +947,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 				fieldHTML =
 					'<tpl for="'+tf.name+'">'+
 					'<div title="{title}" class="ygc-cell '+_this.getFieldClass(tf)+'" style=" margin: 0px; width: '+
-					(tf.resutlWidth?tf.resutlWidth:_this.defaultFieldWidth)+'px; float: left; height: 27px; '+((tf.hidden || tf.lockingView)?'display:none;':'')+'">'+
+					(tf.resultWidth?tf.resultWidth:_this.defaultFieldWidth)+'px; float: left; height: 26px; '+((tf.hidden || tf.lockingView)?'display:none;':'')+'">'+
 					'{display}'+
 					'</div>'+
 					'</tpl>';
@@ -960,6 +1012,9 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 					}
 				}
 			}
+		});
+		this.jointColumns.each(function(j){
+			j.buildJointEls();
 		});
 	},
 	settimeoutDataLineRender : function(initialConfig){
@@ -1106,7 +1161,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 				dragable : !(tf.enableCondition === false),
 				defaultDDGroup : 'searchDomainDrop',
 				baseSize : _this.lineHeight,
-				baseWidth : tf.resutlWidth ? tf.resutlWidth : _this.defaultFieldWidth,
+				baseWidth : tf.resultWidth ? tf.resultWidth : _this.defaultFieldWidth,
 				float : 'left',
 				cls : 'ygh-hd '+_this.getTitleClass(tf),
 				baseMargin : 0,
@@ -1126,6 +1181,12 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 					afterrender : function( tileThis ){
 						tileThis.el.on('click',function(eve){
 							eve.stopEvent();
+							/**
+							 * 合并列才可排序
+							 **/
+							if(_this.jointColumns.getCount()>0 && !_this.jointColumns.containsKey(tileThis.data.name)){
+								return;
+							}
 							if(!tileThis.el.first().hasClass('ygh-hd-order-desc')){
 								_this._APP.sortByDataIndex(tileThis.data.name,'desc');
 							}else{
@@ -1196,6 +1257,11 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 		if(this.CTO[0]){
 			this.CTO[0].columnResize(index,minaWidth);
 		}
+		/**
+		 * 临时方法，在列宽发生变化时，重新部署数据DOM，以保证合并数据列的宽度正确。
+		 **/ 
+		if(this.jointColumns.length > 0)
+			this.searchGridView.booterDataElements(this.store);
 	},
 	setColumnOrder : function(name, index){
 		var tile = null;
@@ -1227,6 +1293,11 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 			df.splice(index-1,0,mf);
 		}
 		this.createRecordTileEl();
+		/**
+		 * 临时方法，在列宽发生变化时，重新部署数据DOM，以保证合并数据列的宽度正确。
+		 **/ 
+		if(this.jointColumns.length > 0)
+			this.searchGridView.booterDataElements(this.store);
 	},
 	onMetaAdd : function(field){
 		var addedTile = this.createFieldTile(field);
@@ -1238,7 +1309,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 		this.createRecordTileEl();
 		var addedTemp = new Ext.XTemplate(
 				'<div class="ygc-cell" style=" margin: 0px; width: '+
-				(field.resutlWidth ? field.resutlWidth : this.defaultFieldWidth)+'px; float: left; height: 27px;">'+
+				(field.resultWidth ? field.resultWidth : this.defaultFieldWidth)+'px; float: left; height: 27px;">'+
 				'</div>');
 		var rows = this.searchGridView.getRows();
 		var len = rows.length;
@@ -1339,10 +1410,26 @@ Ext.extend(Wlj.frame.functions.app.widgets.TitleTile, Ext.util.Observable, {
 		this.searchGridView.onContextMenu(eve, html, obj, added);
 	},
 	onTitleFieldContextMenu : function(eve, html, obj, added, tf){
-		added.push({
-			text : '锁定该列',
-			handler : this.lockingColumn.createDelegate(this, [tf])
-		});
+		var columnName = tf.name;
+		if(this.jointColumns.get(columnName)){
+			added.push({
+				text : '取消合并',
+				handler : this.unjointColumn.createDelegate(this, [columnName])
+			});
+		}else{
+			if(this.cellJointable){
+				if(this.jointColumnsCountTop == 0 || this.jointColumns.getCount() < this.jointColumnsCountTop){
+					added.push({
+						text : '合并单元格',
+						handler : this.jointColumn.createDelegate(this, [columnName])
+					});
+				}
+			}
+			added.push({
+				text : '锁定该列',
+				handler : this.lockingColumn.createDelegate(this, [tf])
+			});
+		}
 		this.onTitleContextMenu(eve, html, obj, added, tf);
 	},
 	destroy : function(){
@@ -1739,7 +1826,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 		fields.each(function(field){
 			if(field.lockingView && field.text && !field.hidden){
 				_this.lockingColumns.add(field);
-				var widthToAdd = field.resutlWidth ? field.resutlWidth : _this.defaultFieldWidth;
+				var widthToAdd = field.resultWidth ? field.resultWidth : _this.defaultFieldWidth;
 				_this.viewWidth = _this.viewWidth + widthToAdd + 12;
 			}
 		});
@@ -1829,7 +1916,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 			dragable : !(tf.enableCondition === false),
 			defaultDDGroup : 'searchDomainDrop',
 			baseSize : _this.titleHeight,
-			baseWidth : tf.resutlWidth ? tf.resutlWidth : _this.defaultFieldWidth,
+			baseWidth : tf.resultWidth ? tf.resultWidth : _this.defaultFieldWidth,
 			float : 'left',
 			cls : 'ygh-hd '+_this.getTitleClass(tf),
 			baseMargin : 0,
@@ -1955,7 +2042,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 			var fieldClass = _this.getFieldClass(tf);
 			var index = record.store.indexOf(record);
 			var oddc = index % 2 ===0 ? "ygc-row-odd " : "";
-			var width =  tf.resutlWidth ? tf.resutlWidth : _this.defaultFieldWidth;
+			var width =  tf.resultWidth ? tf.resultWidth : _this.defaultFieldWidth;
 			_this.cellTemplate.append(
 					_this.columnContainers[_this.lockingColumns.indexOf(tf)],
 					{
@@ -2057,7 +2144,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 		this.titleTile.items.get(index).baseWidth = width;
 		this.titleTile.items.get(index).initialConfig.baseWidth = width;
 		this.titleTile.baseWidth = recordWidth;
-		itemObj.resutlWidth = width;
+		itemObj.resultWidth = width;
 		this.viewWidth = recordWidth;
 		this.titleTile.get(index).el.applyStyles({
 			width : width + 'px'
@@ -2093,7 +2180,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 		//remvoe config
 		var remed = this.lockingColumns.removeAt(index);
 		var dataIndex = remed.name;
-		var columnWidth = remed.resutlWidth ? remed.resutlWidth : this.defaultFieldWidth;
+		var columnWidth = remed.resultWidth ? remed.resultWidth : this.defaultFieldWidth;
 		//remove container
 		var container = this.columnContainers[index];
 		this.columnContainers.remove(container);
@@ -2139,7 +2226,7 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 		this.store.fields.get(tf.name).lockingView = true;
 		var field = this.store.fields.get(tf.name);
 		this.lockingColumns.add(field);
-		var widthToAdd = field.resutlWidth ? field.resutlWidth : _this.defaultFieldWidth;
+		var widthToAdd = field.resultWidth ? field.resultWidth : _this.defaultFieldWidth;
 		_this.viewWidth = _this.viewWidth + widthToAdd + 12;
 		_this.titleTile.add(_this.createFieldTile(field));
 		_this.titleTile.doLayout();
@@ -2172,6 +2259,90 @@ Ext.extend(Wlj.frame.functions.app.widgets.LockingTitles, Ext.util.Observable, {
 			this.gridView.titleTile.CTO[0].removeDefaultColumn(tf.name);
 		}
 		_this.fireEvent('fieldlock', tf);
+	}
+});
+
+/**
+ * @cfg 
+ * 		columnName:string, the joint column;
+ * 		grid : Wlj.frame.functions.app.widgets.SearchGrid, the owner grid.
+ * */
+Wlj.frame.functions.app.widgets.JointTitle = function(cfg){
+	if(!cfg.columnName) return false;
+	Ext.apply(this, cfg);
+	this.els = [];
+	this.joints = [];
+};
+
+Ext.extend(Wlj.frame.functions.app.widgets.JointTitle, Ext.util.Observable, {
+	destroy : function(){
+		for(var i=0;i<this.els.length;i++){
+			this.els[i].remove();
+		}
+		this.els = [];
+		this.joints = [];
+	},
+	buildJointEls : function(){
+		var store = this.grid.store;
+		var ownerEl = this.grid.dtElement;
+		var _this = this;
+		this.computerLeftWidth();
+		var lastvalue = 'realfalse';
+		var lastindex = 0;
+		store.each(function(record, index){
+			var value = record.get(_this.columnName);
+			if(lastvalue == 'realfalse'){
+				lastvalue = value;
+				lastindex = index;
+			}else if(lastvalue == value){
+			}else{
+				var joint = _this.computerTopHeight(index, lastindex);
+				joint.data = {
+					name : _this.columnName,
+					value : lastvalue,
+					index : lastindex,
+					lastindex : index - 1
+				};
+				_this.joints.push(joint);
+				lastvalue = value;
+				lastindex = index;
+			}
+		});
+		var joint = _this.computerTopHeight(store.getCount(), lastindex);
+		joint.data = {
+			name : _this.columnName,
+			value : lastvalue,
+			index : lastindex,
+			lastindex : store.getCount() - 1
+		}
+		this.joints.push(joint);
+		Ext.each(this.joints, function(theJoint){
+			var tf = store.fields.get(theJoint.data.name);
+			var title = _this.grid.titleTile;
+			var fData = title.formatFieldData(tf,title.translateFieldData(tf, store.getAt(theJoint.data.index).get(tf.name)));
+			_this.els.push(ownerEl.createChild({
+				tag : 'div',
+				cls : 'ygc-cell ygc-row-odd ygc-popCell',
+				style : 'width:'+_this.width+'px;height:'+theJoint.height+'px;line-height:'+theJoint.height+'px;left:'+_this.left+'px;top:'+theJoint.top+'px;',
+				html : fData
+			}));
+		});
+	},
+	computerLeftWidth : function(){
+		var needRn = this.grid.needRN;
+		var titletile = needRn ? 
+			this.grid.titleTile.titleTile.items.get(this.grid.titleTile.indexedField.indexOf(this.columnName)+1):
+			this.grid.titleTile.titleTile.items.get(this.grid.titleTile.indexedField.indexOf(this.columnName));
+		this.left = titletile.el.getXY()[0];
+		this.width = parseInt(titletile.el.dom.style.width);
+	},
+	computerTopHeight : function(index, lastindex){
+		var top = lastindex * 27;
+		var height = (index - lastindex) * 27 - 1;
+		return {
+			top : top,
+			height : height
+		}
 	}
 });
 

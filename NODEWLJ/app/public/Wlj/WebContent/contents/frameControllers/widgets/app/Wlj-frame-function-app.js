@@ -11,9 +11,14 @@ Wlj.frame.functions.app.App = function(cfg){
 	this.tbar = [];
 	
 	this.needRN = WLJUTIL.needRN;
+	this.closeMutiSelect = WLJUTIL.closeMutiSelect;
 	this.rnWidth = WLJUTIL.rnWidth;
 	this.contextMenuAble = WLJUTIL.contextMenuAble;
 	this.pagSrollingLevel = WLJUTIL.pagSrollingLevel;
+	
+	this.cellJointable = WLJUTIL.cellJointable;
+	this.jointColumnsCountTop = WLJUTIL.jointColumnsCountTop;
+	
 	
 	if(WLJUTIL.easingStrategy.indexOf(WLJUTIL.dataLineEasing)>=0){
 		this.easingStrtegy = {};
@@ -24,7 +29,7 @@ Wlj.frame.functions.app.App = function(cfg){
 		this.easingStrtegy = false;
 	}
 	
-	this.edgeVies = {
+	this.edgeViews = {
 		top : false,
 		left : false,
 		right : false,
@@ -47,6 +52,10 @@ Wlj.frame.functions.app.App = function(cfg){
 	
 	this.needGrid = true;
 	this.needTbar = true;
+	
+	this.ExtPanelMgr = false;
+	
+	this.extPanelCfg = [];
 	
 	Ext.apply(this,cfg);
 	
@@ -175,6 +184,7 @@ Wlj.frame.functions.app.App.prototype.edgeViewBaseCfg = {
 Wlj.frame.functions.app.App.prototype.init = function(){
 	this.vs = Ext.getBody().getViewSize();
 	Ext.log('开始构建APP内部对象');
+	this.buildExtPanelMgr();
 	this.buildEdgeViews();
 	this.buildMajor();
 	this.render();
@@ -199,6 +209,10 @@ Wlj.frame.functions.app.App.prototype.init = function(){
 			}
 		}
 	}
+//	if(conditionTest){
+//		new conditionTest(this);
+//		new orderRunTest(this);
+//	}
 };
 /**
  * 清除window域配置
@@ -224,7 +238,7 @@ Wlj.frame.functions.app.App.prototype.clearSite = function(){
 	window.editValidates = false;
 	window.createLinkages = false;
 	window.editLinkages = false;
-	window.edgeVies = false;
+	window.edgeViews = false;
 	window.customerView = false;
 	window.listeners = false;
 	window.tbar = false;
@@ -331,7 +345,7 @@ Wlj.frame.functions.app.App.prototype.destroy = function(){
 	this.resultDomain = null;
 	this.fields = null;
 	this.customerView = false;
-	this.edgeVies = {
+	this.edgeViews = {
 		top : false,
 		left : false,
 		right : false,
@@ -1008,6 +1022,7 @@ Wlj.frame.functions.app.App.prototype.createResultCfg = function(){
 	var createResultCfg = {};
 	
 	createResultCfg.needRN = this.needRN;
+	createResultCfg.closeMutiSelect = this.closeMutiSelect;
 	createResultCfg.rnWidth = this.rnWidth;
 	
 	createResultCfg.multiSelectSeparator = WLJUTIL.multiSelectSeparator;
@@ -1038,6 +1053,9 @@ Wlj.frame.functions.app.App.prototype.createResultCfg = function(){
 	createResultCfg.detailFormCfgs = this.detailFormCfgs;
 	createResultCfg.resultDomainCfg = this.resultDomainCfg ? this.resultDomainCfg : false;
 	createResultCfg.pagSrollingLevel = this.pagSrollingLevel;
+	createResultCfg.cellJointable = this.cellJointable;
+	createResultCfg.jointColumnsCountTop = this.jointColumnsCountTop;
+	
 	createResultCfg.hoverXY = WLJUTIL.hoverXY;
 	createResultCfg.listeners = {
 		beforeviewhide : function(theView){
@@ -1128,14 +1146,14 @@ Wlj.frame.functions.app.App.prototype.buildMajor = function(){
 	var left = 'left',right = 'right', top = 'top',buttom = 'buttom';
 	var leftPx = 0,rightPx = 0,topPx = 0,buttomPx = 0;
 	Ext.log('构建主查询区域');
-	if(this.edgeVies[left])
-		leftPx = this.edgeVies[left].width;
-	if(this.edgeVies[right])
-		rightPx = this.edgeVies[right].width;
-	if(this.edgeVies[top])
-		topPx = this.edgeVies[top].height;
-	if(this.edgeVies[buttom])
-		buttomPx = this.edgeVies[buttom].height;
+	if(this.edgeViews[left])
+		leftPx = this.edgeViews[left].width;
+	if(this.edgeViews[right])
+		rightPx = this.edgeViews[right].width;
+	if(this.edgeViews[top])
+		topPx = this.edgeViews[top].height;
+	if(this.edgeViews[buttom])
+		buttomPx = this.edgeViews[buttom].height;
 	
 	this.seearchVs = {
 		width : this.vs.width - leftPx - rightPx,
@@ -1177,13 +1195,19 @@ Wlj.frame.functions.app.App.prototype.buildMajor = function(){
 	});
 };
 /**
+ * 构建原生面板管理器
+ */
+Wlj.frame.functions.app.App.prototype.buildExtPanelMgr = function(){
+	this.ExtPanelMgr = new Ext.util.MixedCollection();
+};
+/**
  * 构建上下左右边缘区域
  * @return
  */
 Wlj.frame.functions.app.App.prototype.buildEdgeViews = function(){
 	
 	var left = 'left',right = 'right', top = 'top',buttom = 'buttom';
-	var viewsCfg = this.edgeVies;
+	var viewsCfg = this.edgeViews;
 	
 	if(viewsCfg[left]){
 		Ext.log('构建左部面板');
@@ -1245,14 +1269,14 @@ Wlj.frame.functions.app.App.prototype.render = function(){
 	var left = 'left',right = 'right', top = 'top',buttom = 'buttom';
 	var _this = this;
 	var items  = [];
-	if(this.edgeVies[left])
-		items.push(this.edgeVies[left].panel);
-	if(this.edgeVies[right])
-		items.push(this.edgeVies[right].panel);
-	if(this.edgeVies[top])
-		items.push(this.edgeVies[top].panel);
-	if(this.edgeVies[buttom])
-		items.push(this.edgeVies[buttom].panel);
+	if(this.edgeViews[left])
+		items.push(this.edgeViews[left].panel);
+	if(this.edgeViews[right])
+		items.push(this.edgeViews[right].panel);
+	if(this.edgeViews[top])
+		items.push(this.edgeViews[top].panel);
+	if(this.edgeViews[buttom])
+		items.push(this.edgeViews[buttom].panel);
 	items.push(this.majorPanel);
 	Ext.log('页面渲染！');
 	this.viewPort = new Ext.Viewport({
@@ -2412,4 +2436,143 @@ Wlj.frame.functions.app.App.prototype.unlockField = function(fieldName){
 	if(!tf) return false;
 	var index = this.resultDomain.searchGridView.lockingViewBuilder.lockingColumns.indexOf(tf);
 	this.resultDomain.searchGridView.lockingViewBuilder.unlockColumn(index);
+};
+/**
+ * 根据标题获取封装的原生面板对象
+ * @param title : Panel标题
+ * @return
+ */
+Wlj.frame.functions.app.App.prototype.getExtPanelByTitle = function(title){
+	var resultarr = [];
+	var _this = this;
+	this.ExtPanelMgr.each(function(item,index){
+		if(item.title == title){
+			resultarr.push(item);
+		}
+	});
+	if (_this.extPanelCfg) {
+		Ext.each(_this.extPanelCfg,function(r){
+			if(r.title == title){ // 匹配的对象
+				var obj = false
+				obj = _this.ExtPanelMgr.get('NG-'+r.id);
+				if (!obj) { // 对象未创建
+					obj = _this.buildExtPanel(r);
+					resultarr.push(obj);
+				}
+			}
+		});
+	}
+	return resultarr;
+};
+/**
+ * 根据索引获取封装的原生面板对象
+ * @param id : id
+ * @return false或者面板对象
+ */
+Wlj.frame.functions.app.App.prototype.getExtPanelById = function(id){
+	var _this = this;
+	var obj = false;
+	try {
+		obj = _this.ExtPanelMgr.get('NG-'+id);
+		if (!obj && _this.extPanelCfg) {
+			Ext.each(_this.extPanelCfg,function(r){
+				if(r.id == id || r.id == 'NG-'+id){
+					obj = _this.buildExtPanel(r);
+					return false; // 结束循环
+				}
+			});
+		}
+	} catch (e) {
+		return false;
+	}
+	return obj;
+};
+/**
+ * 删除封装的原生面板对象
+ * @param obj/id : 要删除的组件对象或ID
+ * @return
+ */
+Wlj.frame.functions.app.App.prototype.removeExtPanel = function(obj){
+	if (typeof obj == 'string') {
+		obj = this.ExtPanelMgr.remove(this.getExtPanelById(obj));
+	} else {
+		obj = this.ExtPanelMgr.remove(obj);
+	}
+	if (!obj) {
+		return false;
+	}
+	try {
+		obj.destroy(); //销毁对象并从父容器中移除
+	} catch (e) {
+		Ext.error('销毁面板对象失败');
+		return false;
+	}
+	return true;
+};
+/**
+ * 构造一个Ext面板,根据传入参数不同可以创建表格,从属表格,表单,从属表单,以及原生的Ext面板
+ * @param cfg
+ * 配置项说明,配置同自定义面板
+ * type : String, 面板类型, 允许为空, 可为 'grid' 或 'form'
+ * 分为三种情况:
+ * 一.当type为空时, 返回Ext.Panel;
+ * 二.当type='grid'时,返回一个nativegrid(封装表格)或hypotaxisgrid(从属表格)面板,配置如下:
+ * 		url : String, 加载数据的url
+ * 		title : String, 标题
+ * 		fields : Object, 数据模型, 例: fields : {fields:[{name:'column',text:'字段'.....}]}, 支持原生Ext属性
+ * 		gridButtons : Array, 列表按钮, 例: gridButtons : [text:'button',iconCls:'ico-w-50',fn:function(){}]
+ * 		pageable : Boolean, 是否分页, 默认为true
+ * 		grideditable : Boolean, 是否可编辑, 默认为false
+ * 		isCsm : Boolean, 是否有选择框, 默认为true
+ * 		singleSelect : Boolean, 是否单选, 默认为false
+ * 		gridlisteners : Object, 列表的监听事件, 配置同Ext
+ * 		region : String, border布局的区域配置,同Ext
+ * 		linktable : String/Object, 联动主表的名称(仅限'searchGridView')或对象
+ * 		linkfields : Array, 联动主表的关联字段, 用于从表加载数据的附加参数,例:linkfields:[{field:'param1',value:'01'},{...}]
+ * 三.当type='form'时,返回一个nativeform(封装表单)或HypotaxisForm(从属表单)面板,配置如下:
+ * 		groups : Array, 输入框定义, 例: groups : [columnCount:2,//列数
+ * 											fields:['COL1','COL2'],//输入框定义,也可以用原生Ext的配置{name:'',text:''}
+ * 											fn:function(COL1,COL2){return [COL1,COL2];}]
+ * 		formButtons : Array, 表单按钮, 例: formButtons:[{text:'button',fn:function(){}}]
+ * 		linktable : String/Object, 联动主表的名称(仅限'searchGridView')或对象
+ * @return
+ */
+Wlj.frame.functions.app.App.prototype.buildExtPanel = function(cfg){
+	var createCfg = {
+		appObject : this
+	};
+	Ext.applyIf(createCfg,cfg);
+	if (createCfg.type == 'grid') {
+		if (createCfg.linktable) {
+			return new Wlj.frame.functions.app.widgets.HypotaxisGrid(createCfg);
+		}
+		return new Wlj.frame.functions.app.widgets.NativeGrid(createCfg);
+	}
+	if (createCfg.type == 'form') {
+		if (createCfg.linktable) {
+			return new Wlj.frame.functions.app.widgets.HypotaxisForm(createCfg);
+		}
+		return new Wlj.frame.functions.app.widgets.NativeForm(createCfg);
+	}
+	return new Ext.Panel(createCfg);
+};
+/**
+ * 在列上合并相同数据单元格。不会触发排序，只会合并相邻且数值相同的单元格。
+ * @param name
+ * 		String，列字段名。
+ **/ 
+Wlj.frame.functions.app.App.prototype.jointColumn = function(name){
+	if(this.needGrid){
+		this.resultDomain.searchGridView.titleTile.jointColumn(name);
+	}
+};
+/**
+ * 取消在列上合并相同数据单元格。不会触发排序。如该列未做过单元格合并，则没有任何影响。
+ * @param name
+ * 		String，列字段名。
+ **/ 
+Wlj.frame.functions.app.App.prototype.unjointColumn = function(name){
+	if(this.needGrid){
+		this.resultDomain.searchGridView.titleTile.unjointColumn(name);
+	}
 };

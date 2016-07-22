@@ -18,7 +18,7 @@ Wlj.frame.functions.app.Util = {
 	
 	columnResizable : true,															//是否开启列宽调整功能
 	hoverXY : false,																//是否开启行列鼠标悬浮效果
-	pagSrollingLevel : 0,														// 当出现多层分组表头时，左右滑动图标的滚动基准表头层级，默认值包括：'top'：顶层, buttom：底层,title：字段表头（暂未实现）,{groupLevel}：表头层级（数值），从下向上计数，从0开始。如超出层级，则无任何动作。
+	pagSrollingLevel : 0,															//当出现多层分组表头时，左右滑动图标的滚动基准表头层级，默认值包括：'top'：顶层, buttom：底层,title：字段表头（暂未实现）,{groupLevel}：表头层级（数值），从下向上计数，从0开始。如超出层级，则无任何动作。
 	
 	defaultDateFormat : 'Y-m-d',													//默认日期类型转JSON格式	
 		
@@ -35,6 +35,7 @@ Wlj.frame.functions.app.Util = {
 	needCloseLable4DCF : false,														//是否为动态查询条件添加一个关闭标签
 	
 	needRN : true,																	//是否在列表上需要一个行号列
+	closeMutiSelect : false,														//关闭序号列多选功能
 	rnWidth : 40,																	//行号列宽度
 	
 	multiSelectSeparator : ',',														//多选下拉框默认分隔符
@@ -45,6 +46,10 @@ Wlj.frame.functions.app.Util = {
 	tbarViewAlign : 'left',														//tbar中，面板按钮的居左或居右布局；可选：left、right；默认left；如果tbarButtonAlign居右，则面板按钮同样居右。
 
 	enableDataDD : true,															//是否可以拖动数据单元格
+	
+	cellJointable : true,															//是否启用单元格合并机制。
+	jointColumnsCountTop : 0,														//限定可合并列的上限。0为不限制，目前版本中无级联效果，故推荐设为1.
+	
 	
 	easingStrategy : ['settimeout', 'scrolling'],									//延迟加载数据行策略集合<scrolling暂未实现>
 	dataLineEasing : 'settimeout',													//是否启用数据行延迟加载策略.无值或非法值，则不启用延迟策略。可选参数见于easingStrategy属性；
@@ -190,14 +195,14 @@ Wlj.frame.functions.app.Util = {
 					}
 					var jsUrl = parent.CUSTVIEW?parent.CUSTVIEW.CURRENT_VIEW_URL:'';
 					if(!jsUrl){
-						jsUrl = taskMgr.getTask('task_'+__resId).action;
+						jsUrl = taskMgr.getTask('task_'+JsContext._resId).action;
 					}
 					var html =	'<div class=\'prpBanner\'></div><div class=\'prpContent\'>'+
-					'<h1>&nbsp;&copy;&nbsp;版权所有</h1>'+
+					'<h1>宇信易诚科技有限公司&nbsp;&copy;&nbsp;版权所有</h1>'+
 					'产品版本：V4.6'+
 					'<br/>前端版本：'+__frameVersion+':'+__frontVersion+
-					'<br/>功能名称：'+taskMgr.getTask('task_'+__resId).name+
-					'<br/>ResId：'+__resId+
+					'<br/>功能名称：'+taskMgr.getTask('task_'+JsContext._resId).name+
+					'<br/>ResId：'+JsContext._resId+
 					'<br/>引用js：'+jsUrl+
 					'</div>';
 						new Ext.Window({
