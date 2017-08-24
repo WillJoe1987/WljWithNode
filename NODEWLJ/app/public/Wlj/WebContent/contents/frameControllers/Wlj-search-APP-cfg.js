@@ -1,7 +1,7 @@
 Ext.ns('Wlj.search.App');
 
 Wlj.search.App.UTIL = {
-	needSearchArea : true,				//是否需要点击开始后的主查询页面，该配置项会影响到的开始、返回主功能图标的展示
+	needSearchArea : false,				//是否需要点击开始后的主查询页面，该配置项会影响到的开始、返回主功能图标的展示
 	
 	menuInWindow : true,				//是否构建任务窗口顶部内置菜单
 	menuInWindowExpand : false, 		//窗口内部一级菜单是否平铺开

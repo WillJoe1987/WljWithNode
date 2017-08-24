@@ -202,6 +202,4 @@ if(Wlj.memorise && Wlj.memorise.Tile){
 		}
 	});
 }
-if(Wlj.search){
-	Wlj.widgets.search.window.TaskItem.prototype.defaultWljPage = '/contents/frameControllers/wlj-function.html';
-};
+

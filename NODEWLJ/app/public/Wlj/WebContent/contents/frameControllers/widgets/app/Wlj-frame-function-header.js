@@ -47,13 +47,13 @@ var comitUrl = false;
  * 					类型：string;
  * 					说明：字段涉及到的映射字典项;该字典项将做为查询结果中的字段映射依据,以及表单面板中的下拉框的选择值;
  * 					必选：否;
- * 				resultWidth : 
+ * 				resutlWidth : 
  * 					类型：int;
  * 					说明：字段在查询结果列中展示的宽度,默认150;
  * 					必选：否;
  * 				xtype : 
  * 					类型：string;
- * 					说明：字段在面板中渲染时的类型，特别的，当xtype='wcombotree'时，需要以下三个属性,innerTree,showField,hideField
+ * 					说明：字段在面板中渲染时的类型，特别的，当xtype='wcombotree'时，需要一下三个属性,innerTree,showField,hideField
  * 					必选：否
  * 				innerTree ： 
  * 					类型：string;
@@ -102,10 +102,6 @@ var comitUrl = false;
  * 				lockingView :
  * 					类型：boolean
  * 					说明：是否在左侧固定列显示；
- * 					必选：否；
- * 				cellJointable : 
- * 					类型：boolean（string尚未支持）
- * 					说明：默认false，是否做出列上相同数据的单元格合并。（string类型可指向级联合并中，上一级合并的字段。级联合并机制尚未制作。）
  * 					必选：否；
  * 		必选：是;
  */
@@ -295,7 +291,7 @@ var localLookup = false;
 
 
 /**
- * edgeViews :
+ * edgeVies :
  * 		类型：object;
  * 		说明：四个属性,分别配置上下左右四个边缘配置信息;
  * 			top:
@@ -372,7 +368,7 @@ var localLookup = false;
  * 
  * 		必选：否;
  */
-var edgeViews = false;
+var edgeVies = false;
 
 
 /**
@@ -385,14 +381,6 @@ var edgeViews = false;
  */
 var customerView = false;
 
-/**
- * extPanelCfg : 
- * 		类型: array[object]
- * 		说明: 自定义面板(包括表格,表单,从属表格,从属表单,原生Ext面板等5个面板),配置项object参见API中buildExtPanel的说明
- * 				获取对象通过getExtPanelById与getExtPanelByTitle两个方法实现
- * 		必选: 否;
- */
-var extPanelCfg = false;
 
 /**
  * treeLoaders|treeCfgs

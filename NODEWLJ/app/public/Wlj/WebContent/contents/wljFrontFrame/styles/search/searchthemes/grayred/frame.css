@@ -80,11 +80,6 @@
  _background:none;
  _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="styles/search/searchthemes/grayred/pics/frame/icon08.png");	
 }
-.main_menu_ul .lv1 .icon10{
-	background:url(pics/frame/icon10.png) no-repeat center;	
- _background:none;
- _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="styles/search/searchthemes/grayred/pics/frame/icon10.png");	
-}
 /**主图标选中**/
 .main_menu_ul .lv1:hover .icon0{
 	background:url(pics/frame/icon00_h.png) no-repeat center;	
@@ -130,11 +125,6 @@
 	background:url(pics/frame/icon08_h.png) no-repeat center;	
  _background:none;
  _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="styles/search/searchthemes/grayred/pics/frame/icon08_h.png");	
-}
-.main_menu_ul .lv1:hover .icon10{
-	background:url(pics/frame/icon10_h.png) no-repeat center;	
- _background:none;
- _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="styles/search/searchthemes/grayred/pics/frame/icon10_h.png");	
 }
 
 .user_oper .loginout{

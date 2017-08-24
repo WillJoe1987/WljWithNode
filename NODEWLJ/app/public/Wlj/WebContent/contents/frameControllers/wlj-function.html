@@ -1,64 +1,37 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>客户关系管理系统</title>
-	<meta name="keywords" content="客户关系管理系统,CRM" />
-	<meta name="description" content="客户关系管理系统,CRM" />
-	<meta name="Author" content="YuchengTech" />
+	<title>WLJAPPLICATION</title>
+	<meta name="keywords" content="WLJ,CRM" />
+	<meta name="description" content="WLJ,CRM" />
+	<meta name="Author" content="WILLJOE" />
 	<link rel="shortcut icon" href="favicon.ico" />
-	
+	<script type=text/javascript src="../commonjs/context.js" ></script>
+	<LINK rel=stylesheet type=text/css href="../wljFrontFrame/styles/common/ext3/resources/css/ext-all-notheme.css" />
+	<LINK rel=stylesheet type=text/css href="../wljFrontFrame/styles/search/searchthemes/grayred/main.css" />
+	<LINK rel=stylesheet type=text/css href="../wljFrontFrame/Ext-Patch-Css-1.000-v1.0.css" />
+	<SCRIPT type=text/javascript src="../extlib/ext-base.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../extlib/ext-all.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../extlib/ux-all.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../wljFrontFrame/demoPatch4EXT.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../wljFrontFrame/Ext-Patch-1.000-v1.0.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../wljFrontFrame/Ext-Loaders-1.000-v1.0.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="../extlib/locale/ext-lang-zh_CN.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="defaultPatches.js" ></SCRIPT>
+	<SCRIPT type=text/javascript src="../../jsons/lookupdatas.json" ></SCRIPT>
+	<SCRIPT type=text/javascript src="WljFunctionBooter.js" ></SCRIPT>
+	<SCRIPT type=text/javascript src="../wljFrontFrame/demoPatch4WLJ.js"></SCRIPT>
 	<SCRIPT type=text/javascript>
-	var basepath = "../..";	
-	var __frontVersion = '1.1.201402261745';
-	var __frameVersion = '1.1';
-	var __userId = 'admin';
-	var __userName = '系统管理员';
-	var __userCname = '系统管理员';
-	var __userIcon = '';
-	var __updatePwdStat = '1';
-	var __themeColorId = 'null';
-	var __background='/contents/wljFrontFrame/styles/search/searchthemes/blue/pics/index/index_bg_03.jpg';
-	var __theme='grayred';
-	var __wordsize='ra_normal';
-	var __roles = '42$';
-	var __roleCodes = 'admin$';
-	var __roleNames = '系统管理员';
-	var __roleType = '1';
-	var __units = '500';
-	var __grants = [];
-	var __resId = 'null';
-	var __unitname = '小贷公司';
-	var __unitlevel = '1';
-	var __appId = '62';
-	var __loginType = '0';
-</SCRIPT>
-<LINK rel=stylesheet type=text/css href="../wljFrontFrame/styles/common/ext3/resources/css/ext-all-notheme.css" />
-<LINK rel=stylesheet type=text/css href="../wljFrontFrame/styles/search/searchthemes/grayred/main.css" />
-<LINK rel=stylesheet type=text/css href="../wljFrontFrame/Ext-Patch-Css-1.000-v1.0.css" />
-<SCRIPT type=text/javascript src="../extlib/ext-base.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../extlib/ext-all.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../extlib/ux-all.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../wljFrontFrame/demoPatch4EXT.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../wljFrontFrame/Ext-Patch-1.000-v1.0.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../wljFrontFrame/Ext-Loaders-1.000-v1.0.js"></SCRIPT>
-<SCRIPT type=text/javascript src="../extlib/locale/ext-lang-zh_CN.js"></SCRIPT>
-<SCRIPT type="text/javascript" src="defaultPatches.js" ></SCRIPT>
-<SCRIPT type="text/javascript" src="../../jsons/lookupdatas.json" ></SCRIPT>
-<SCRIPT type="text/javascript" src="WljFunctionBooter.js" ></SCRIPT>
-<SCRIPT type=text/javascript src="../wljFrontFrame/demoPatch4WLJ.js"></SCRIPT>
-<SCRIPT type=text/javascript>
-	Ext.onReady(function(){
-		window.__projectType = 'static';
-		window.APPBUILD = new Wlj.frame.functions.app.Builder();
-		//修复列模型单击时候菜单不收起问题
-		Ext.getBody().on('click',function(){
-			parent.Ext.menu.MenuMgr.hideAll();
+		Ext.onReady(function(){
+			window.__projectType = 'static';
+			window.APPBUILD = new Wlj.frame.functions.app.Builder();
+			//修复列模型单击时候菜单不收起问题
+			Ext.getBody().on('click',function(){
+				parent.Ext.menu.MenuMgr.hideAll();
+			});
+			
 		});
-		
-	});
-	
-	
-</SCRIPT>
+	</SCRIPT>
 </head>
 <body>
 </body>

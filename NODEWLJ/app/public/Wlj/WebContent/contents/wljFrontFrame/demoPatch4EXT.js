@@ -26,6 +26,7 @@ Ext.apply(Ext.Ajax,{
 			if(config.url.indexOf('.json')<0){
 				return false;
 			}
+			//debugger;
 			if(this.busiTag){
 				//this.busiTag.removeNode(true);
 				this.busiTag = false;

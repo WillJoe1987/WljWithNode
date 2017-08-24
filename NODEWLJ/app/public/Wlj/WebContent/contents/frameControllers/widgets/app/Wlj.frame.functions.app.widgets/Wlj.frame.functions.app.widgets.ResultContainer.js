@@ -26,7 +26,6 @@ Wlj.frame.functions.app.widgets.ResultContainer = Ext.extend(Ext.Panel, {
 	tbarViewAlign : 'left',
 	
 	needRN : false,
-	closeMutiSelect : false,
 	rnWidth : false,
 	
 	CREATE_VIEW:'createView',
@@ -70,9 +69,6 @@ Wlj.frame.functions.app.widgets.ResultContainer = Ext.extend(Ext.Panel, {
 	
 	resultDomainCfg : false,
 	pagSrollingLevel : 'top',
-	
-	cellJointable : false,
-	jointColumnsCountTop : 0,
 	
 	viewPanel : {
 		createView : false,
@@ -215,7 +211,7 @@ Wlj.frame.functions.app.widgets.ResultContainer = Ext.extend(Ext.Panel, {
 		}
 		Wlj.frame.functions.app.widgets.ResultContainer.superclass.initComponent.call(this);
 		_this._APP.fireEvent('afterresultinit', _this, _this._APP);
-//		_this._APP.fireEvent('beforeresultrender', _this, _this._APP);
+		_this._APP.fireEvent('beforeresultrender', _this, _this._APP);
 	},
 	validateFieldsCfg : function(){
 		var dfs = this.dataFields;
@@ -235,7 +231,6 @@ Wlj.frame.functions.app.widgets.ResultContainer = Ext.extend(Ext.Panel, {
 	},
 	onRender : function(ct, position){
 		var _this = this;
-		_this._APP.fireEvent('beforeresultrender', _this, _this._APP);
 		this.width = this.vs.width;
 		this.height = this.vs.height;
 		Wlj.frame.functions.app.widgets.ResultContainer.superclass.onRender.call(this, ct, position);
@@ -249,13 +244,10 @@ Wlj.frame.functions.app.widgets.ResultContainer = Ext.extend(Ext.Panel, {
 				pageSize : this.pageSize,
 				enableDataDD : this.enableDataDD,
 				needRN : this.needRN,
-				closeMutiSelect : this.closeMutiSelect,
 				rnWidth : this.rnWidth,
 				easingStrtegy : this.easingStrtegy,
 				columnGroups : (this.resultDomainCfg && this.resultDomainCfg.columnGroups) ? this.resultDomainCfg.columnGroups : false,
-				pagSrollingLevel : this.pagSrollingLevel,
-				cellJointable : this.cellJointable,
-				jointColumnsCountTop : this.jointColumnsCountTop
+				pagSrollingLevel : this.pagSrollingLevel
 			});
 			this.add(this.searchGridView);
 			this.searchGridView.on('recordselect', function(record, store,tile){
